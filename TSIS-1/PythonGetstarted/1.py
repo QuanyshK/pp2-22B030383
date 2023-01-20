@@ -1,0 +1,1 @@
+#If you have some problems with terminal(command line in windows) You can always download Pycharm.
