@@ -1,35 +1,51 @@
-import pygame
-import time
-import datetime
-pygame.init()
-screen = pygame.display.set_mode((800, 800))
-clock = pygame.time.Clock()
-done = False
-myClock = pygame.image.load('mickeyout.jpg')
-myClock = pygame.transform.scale(myClock, (600, 600))
-minute_arrow = pygame.image.load('mickeyleft.jpg')
-minute_arrow = pygame.transform.scale(minute_arrow, (30 // 1.5, 350 // 1.5))
-second_arrow = pygame.image.load('mickeyright.jpg')
 
-second_arrow = pygame.transform.scale(second_arrow, (25 // 1.5, 400 // 1.5))
-while not done:
-        for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                        done = True
-        my_time = datetime.datetime.now()
-        minuteINT = int(my_time.strftime("%M"))
-        secondINT = int(my_time.strftime("%S"))
-        angleMINUTE = minuteINT * 6 * -1
-        angleSECOND = secondINT * 6 * -1
-
-        minute = pygame.transform.rotate(minute_arrow, angleMINUTE)
-        second = pygame.transform.rotate(second_arrow, angleSECOND)
-        
-
-        screen.fill((255, 255, 255))
-        screen.blit(myClock, (100, 100))
-        screen.blit(second, (500 - int(second.get_width() / 2), 500- int(second.get_height() / 2)))
-        screen.blit(minute, ((500 - int(minute.get_width() / 2), 500 - int(minute.get_height() / 2))))
-        pygame.display.flip()
-        clock.tick(60)
-pygame.quit()
+from datetime import datetime 
+import pygame 
+pygame.init() 
+screen=pygame.display.set_mode((400,400)) 
+a = datetime.now() 
+image = pygame.image.load("mickeyclock.png") 
+image = pygame.transform.scale(image, (400, 400)) 
+handl = pygame.image.load("handl.png") 
+handl = pygame.transform.scale(handl, (200, 200)) 
+handr =pygame.image.load("handr.png") 
+handr = pygame.transform.scale(handr, (200, 200)) 
+def left_hand(surf, image, topleft, angle):  
+    rotated_image = pygame.transform.rotate(image, angle) 
+    new_rect = rotated_image.get_rect(center = image.get_rect(topleft = topleft).center) 
+    surf.blit(rotated_image, new_rect) 
+#правая рука 
+def right_hand(surf, image, topleft, angle):   
+    rotated_image = pygame.transform.rotate(image, angle) 
+    new_rect = rotated_image.get_rect(center = image.get_rect(topleft = topleft).center) 
+    surf.blit(rotated_image, new_rect) 
+#формулы нахождения позиции рук мауса 
+anglel=(51-a.second)*6 
+angleh=308-(a.minute*6) 
+#координаты центра вращения стрелок 
+x=100 
+y=80 
+running = True 
+n=a.second 
+while running: 
+    #присвоил еще одной переменной метод "время сейчас",чтобы выполнялось условие b.second != n во время вращения секундной стрелки 
+    b=datetime.now() 
+    screen.fill((255,255,255)) 
+    #вставил изображения мауса в окно 
+    screen.blit(image,(0,0))    
+    for event in pygame.event.get(): 
+        if event.type==pygame.QUIT: 
+            pygame.quit() 
+            quit() 
+    #вызов функции левой и правой руки 
+    left_hand(screen, handl, [x,y], anglel) 
+    right_hand(screen,handr,[x,y], angleh) 
+    #обновление окна  
+    pygame.display.update()   
+    #увеличиваем угол вращения стрелок     
+    if b.second>=0 and b.second !=n: 
+        n=b.second 
+        anglel-=6 
+    if b.second==0: 
+        angleh-=0.1 
+    print(b.second)
