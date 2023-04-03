@@ -11,7 +11,7 @@ while not done:
         if event.type == pygame.QUIT:
                done=True 
     pressed = pygame.key.get_pressed()
-    if pressed[pygame.K_UP] and Y<=20: Y -=20
+    if pressed[pygame.K_UP] and Y >= 20: Y -= 20
     if pressed[pygame.K_DOWN] and Y <= 800: Y += 20
     if pressed[pygame.K_LEFT] and X >= 20: X -= 20
     if pressed[pygame.K_RIGHT] and X <= 1500: X += 20

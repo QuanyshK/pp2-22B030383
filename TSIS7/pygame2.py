@@ -1,6 +1,6 @@
 import pygame
 import os
-uaqyt = pygame.time.Clock()
+
 ander = ['bedroom-in-my-head-official-audio.mp3', 'Daft Punk - Veridis Quo (Music Video).mp3', 'Dido - Thank You.mp3', 'gorillaz-on-melancholy-hill-official-video.mp3']
 pppn = ['pause.png', 'play.jpg', 'next.jpg', 'previous.png']
 photos = ['inmyhead.jpg', 'veridisquo.jpg', 'thankyou.jpg', 'onmelancholyhill.jpg']
@@ -65,5 +65,5 @@ while not done:
                     screen.blit(pygame.image.load(photos[i]), (395, 5))
                     start(i)
     pygame.display.flip()
-    uaqyt.tick(55)
+
 pygame.quit()

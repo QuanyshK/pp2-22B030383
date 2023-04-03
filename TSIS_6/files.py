@@ -53,8 +53,7 @@ path = input()
 f = open(path, "rt")
 c = open("Copy.txt", "w")
 c.write(f.read())
-c.close()
-#
+c.close
 import os
 path = input()
 if os.path.exists(path) and os.access(path, os.X_OK):
