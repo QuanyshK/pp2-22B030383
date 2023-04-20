@@ -1,7 +1,7 @@
 
 import pygame
 from random import randrange
-import time
+from time import sleep
 import psycopg2
 
 size = width, height = 1050, 650
@@ -26,8 +26,8 @@ font_score = pygame.font.SysFont('Arial', 26, bold=True)
 font_end = pygame.font.SysFont('Arial', 66, bold=True)
 font_level = pygame.font.SysFont('Arial', 26, bold=True)
 font_menu = pygame.font.SysFont('Arial', 85,bold=True)
-game_background = pygame.image.load('background.jpg').convert()
-menu_background = pygame.image.load('menu_background.jpg').convert()
+game_background = pygame.image.load('background.jpg')
+menu_background = pygame.image.load('menu_background.jpg')
 
 
 def login(name):
@@ -100,18 +100,18 @@ def main_menu():
             break
 
 main_menu()
-
-while True:
+working = True
+while working:
     screen.blit(game_background, (0, 0))
 
     # drawing snake, apple, walls
     for i, j in snake:
-        pygame.draw.rect(screen, pygame.Color('white'), (i, j, block - 1, block - 1))
-    pygame.draw.rect(screen, pygame.Color('red'), (*apple, block, block))
+        pygame.draw.rect(screen, (255, 255, 255), (i, j, block - 1, block - 1))
+    pygame.draw.rect(screen, (255, 0, 0), (*apple, block, block))
     if score % 3 == 0 and score > 0:
-        pygame.draw.rect(screen, pygame.Color('orange'), (*orange,block,block))
+        pygame.draw.rect(screen, (255, 20, 190), (*orange,block,block))
     for i, j in walls:
-        pygame.draw.rect(screen, pygame.Color('black'), (i, j, block - 1, block - 1))
+        pygame.draw.rect(screen, (255, 255, 0), (i, j, block - 1, block - 1))
 
     # show score
     render_score = font_score.render(f'SCORE: {score}', True, pygame.Color('orange'))
@@ -127,16 +127,17 @@ while True:
     
 
     # game over
-    if x < 0 or x > width - block or y < 0 or y > height - block\
-    or len(snake) > len(set(snake)) or snake[-1] in walls:
-        while True:
+    if x < 0 or x > width - block or y < 0 or y > height - block or len(snake) > len(set(snake)) or snake[-1] in walls:
+        while working:
             render_end = font_end.render('GAME OVER', True, pygame.Color('orange'))
             screen.blit(render_end, (335, 300))
             pygame.display.flip()
             result = [score, level]
             if record(name):
                 print(f'New record: {score}.')
-                quit()
+            sleep(2)
+            working = False
+                
     # eating apple
     if snake[-1] == apple:
         while apple in snake or apple in walls:
@@ -166,7 +167,7 @@ while True:
         walls.append(wall)
     for event in pygame.event.get():
         if event.type==pygame.QUIT:
-            quit()
+            working = False
 
     pygame.display.flip()
     clock.tick(fps)
@@ -185,6 +186,8 @@ while True:
     if key[pygame.K_d] and dirs['D']:
         dx, dy = 1, 0
         dirs = {'W': True, 'S': True, 'A': False, 'D': True}
+
+
 con.commit()
 cur.close()
 con.close()

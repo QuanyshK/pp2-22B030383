@@ -12,7 +12,6 @@ cur = conn.cursor()
 def disentry(page):
     cur.execute("SELECT * FROM phonebook")
     rows = cur.fetchall()
-    cur.close()
     i = 0
     limit = 10 * page
     for row in rows:
@@ -25,7 +24,19 @@ def disentry(page):
         page = 1000
     if 1 <= int(page) <= len(rows) // 10 + 1:
         disentry(page)
-
+    conn.commit()
+def datausers(data):
+    incorrect = []
+    for d in data:
+        name, number = d
+        if len(number) != 4 or not number.isdigit():
+            incorrect.append(d)
+            continue
+        cur.execute("INSERT INTO PhoneBook (name, number) VALUES (%s, %s)", (name, number))
+    print(incorrect)
+    conn.commit()
+    cur.close()
+    
 def update(name, number):
     cur.execute("SELECT COUNT(*) FROM phonebook WHERE name = %s", (name,))
     count = cur.fetchone()[0]
@@ -35,9 +46,8 @@ def update(name, number):
         cur.execute("UPDATE phonebook SET number = %s WHERE name = %s", (number, name,))
     conn.commit()
     cur.close()
-
 while True:
-    print("1 - insert csv, 2 - insert console, 3 - update, 4 - search, 5 - search part, 6 - select, 7 - delete, 8 - exit")
+    print("1 - insert csv, 2 - insert console, 3 - update, 4 - search, 5 - search part, 6 - select, 7 - delete, 8 - exit, 9 - datausers")
     n = input()
     if n == '1':
         file = input("File name:")
@@ -78,7 +88,11 @@ while True:
         conn.commit()
     elif n == '8':
         break
+    elif n == '9':
+        data = [("Ippoe", "1234"), ("Uzaki", "9877"), ("Tyson", "11564")]
+        datausers(data)
     else:
         print("Please try again, your server is loser")
+     
 
 conn.close()
