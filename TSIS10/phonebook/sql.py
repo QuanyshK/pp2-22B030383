@@ -4,7 +4,7 @@ con = psycopg2.connect(host = "localhost", database = "phonebook", user = "postg
 current = con.cursor()
 
 insert = """
-    INSERT INTO PhoneBook VALUES(%s,%s,%s) returning *;
+    INSERT INTO PhoneBook VALUES(%s,%s) returning *;
 """
 
 update = """
@@ -22,16 +22,16 @@ delete = """
 while True:
     n = int(input(" 1 - insert csv, 2 - insert console, 3 - update, 4 - select, 5 - delete, 6 - exit\n"))
     if n == 1:
-        with open("p4.csv", "r") as f:
+        file = input("File name:")
+        with open(file+".csv", "r") as f:
                 reader = csv.reader(f, delimiter=",")
                 for row in reader:
                     current.execute(insert, row)
         con.commit()
     if n == 2:
-            name = input("Name:")
-            surname = input("Sname:")
+            name = input("name:")
             phoneNumber = input("Number:")
-            current.execute(insert, (name, surname, phoneNumber))
+            current.execute(insert, (name, phoneNumber))
             con.commit()
             
     if n == 3:

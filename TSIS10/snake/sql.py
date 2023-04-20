@@ -136,6 +136,7 @@ while True:
             result = [score, level]
             if record(name):
                 print(f'New record: {score}.')
+                quit()
     # eating apple
     if snake[-1] == apple:
         while apple in snake or apple in walls:
@@ -165,7 +166,7 @@ while True:
         walls.append(wall)
     for event in pygame.event.get():
         if event.type==pygame.QUIT:
-            False
+            quit()
 
     pygame.display.flip()
     clock.tick(fps)
